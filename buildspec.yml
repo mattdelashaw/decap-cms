@@ -13,13 +13,12 @@ phases:
       - npm ci --include=dev
   build:
     commands:
-      - printenv
+      - printenv | grep NODE
       - npm run build
       - printenv | grep NODE
   post_build:
     commands:
       - echo Build completed on `date`
-      - npm publish
       - find . -type d -name node_modules -prune -o -path ./cypress -prune -o -path ./.nx -prune -o -name '*' -print
       # Copy build output directory to CodePipeline artifact location
       - aws s3 sync packages/decap-cms/dist s3://decapdeployartifact --delete
